@@ -12,7 +12,7 @@ def min_local(estaciones, estados_objetivo):
     print(f'Estados añadidos: {solucion_estados} ({len(solucion_estados)})\n')
 
     for num, contenido in estaciones.items():
-        if contenido['Estados'] & solucion_estados == set():
+        if contenido['Estados'] - solucion_estados != set():
         # if estados_objetivo != solucion_estados ó if solucion_estados - contenido['Estados'] != set() => + iteraciones, + estaciones
             print(f'Estados añadidos: {contenido['Estados'] - solucion_estados} ({len(contenido['Estados'] - solucion_estados)})\n')
             solucion_estados = set(solucion_estados) | set(contenido['Estados'])
