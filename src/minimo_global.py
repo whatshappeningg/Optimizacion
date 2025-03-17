@@ -3,8 +3,12 @@ def min_global(estaciones, estados_objetivo):
     solucion_estados = {}
     solucion_estaciones = {}
     num_estaciones = []
-            
-    posible_primera_estacion = [num for num in range(len(estaciones)-1) if len(estaciones[num]['Estados']) >= 3]
+    
+    maximo = 0
+    for num, contenido in estaciones.items():
+        maximo = max(maximo, len(contenido['Estados']))
+
+    posible_primera_estacion = [num for num in range(len(estaciones)-1) if len(estaciones[num]['Estados']) >= maximo]
     
     for primera_estacion in posible_primera_estacion:
 
