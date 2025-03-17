@@ -27,4 +27,46 @@ kthirteen | Missouri (MO), Arkansas (AR) |
 Estados: Idaho, Nevada, Utah, Washington, Montana, Oregon, California, Arizona, New Mexico, Texas, Oklahoma, Kansas, Colorado, Nebraska, South Dakota, Wyoming, North Dakota, Iowa, Minnesota, Missouri, Arkansas, Louisiana.
 
 ### Enunciado
-Beyoncé quiere que su nuevo disco *Cowboy carter* suene en los 22 estados anteriores contratando el menor número de estaciones de radio. El problema es que hay estaciones que cubren el mismo estado, por ejemplo 'kone' y 'ktwo', ambas cubren Idaho. El objetivo es encontrar la combinación mínima de estaciones que cubra todos los estados. Para eso se programará en python un algoritmo de ascensión de colinas para encotrar tanto [mínimos locales](/src/minimo_local.py) como el [mínimo global](/src/minimo_global.py).
+Beyoncé quiere que su nuevo disco *Cowboy carter* suene en los 22 estados anteriores contratando el menor número de estaciones de radio. El problema es que hay estaciones que cubren el mismo estado, por ejemplo 'kone' y 'ktwo', ambas cubren Idaho. El objetivo es encontrar la combinación mínima de estaciones que cubra todos los estados. Para eso se programará en python un algoritmo de ascensión de colinas para encotrar tanto el [mínimo global](/src/minimo_global.py) como [mínimos locales](/src/minimo_local.py).
+
+## Solución
+### Mínimo global
+Esta función recibe un diccionario con las estaciones y sus estados y una lista con los estados a cubrir (es decir, los [datos](#datos)).
+
+La solución puede variar según el primer estado que se escoga, por lo que lo primero es encontrar el mejor estado del que partir, es decir, la estación de radio que cubra el mayor número de estados, a partir de ahí se evaluará para saber si se obtiene un resultado óptimo.
+
+1. Estaciones que cubren el mayor número de estados posibles
+```
+    maximo = 0
+    for num, contenido in estaciones.items():
+        maximo = max(maximo, len(contenido['Estados']))
+
+    posible_primera_estacion = [num for num in range(len(estaciones)-1) if len(estaciones[num]['Estados']) >= maximo]
+```
+
+2. Evaluación de las estaciones
+
+Por cada estación se inicializan:
+- Número de iteraciones del código (`iteraciones`)
+- Una lista que almacena los estados cubiertos (`solucion_estados`) con los estados de la estación a evaluar.
+- Una lista que almacena las estaciones contratadas (`solucion_estaciones`) con la estación a evaluar.
+
+Luego se recorre el diccionario de estaciones. Por cada estación se comprueba si hay estados que todavía no se encuentran en la solución de estados. Si es así, tanto la estación como los estados se unen a las soluciones y se añade una iteración.  
+Antes de reinicializar, el número de estaciones contratadas se almacena en una lista (`num_estaciones`).
+```
+    for primera_estacion in posible_primera_estacion:
+
+        iteraciones = 0
+        solucion_estados = estaciones[primera_estacion]['Estados']
+        solucion_estaciones = [estaciones[primera_estacion]['ID']]
+
+        for num, contenido in estaciones.items():
+
+            if contenido['Estados'] - solucion_estados != set():
+            # if estados_objetivo != solucion_estados ó if solucion_estados - contenido['Estados'] != set() => + iteraciones, + estaciones
+                solucion_estados = set(solucion_estados) | set(contenido['Estados'])
+                solucion_estaciones.append(contenido['ID'])
+                iteraciones += 1
+
+        num_estaciones.append(len(solucion_estaciones))
+```
