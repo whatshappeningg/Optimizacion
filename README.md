@@ -27,7 +27,7 @@ kthirteen | Missouri (MO), Arkansas (AR) |
 Estados: Idaho, Nevada, Utah, Washington, Montana, Oregon, California, Arizona, New Mexico, Texas, Oklahoma, Kansas, Colorado, Nebraska, South Dakota, Wyoming, North Dakota, Iowa, Minnesota, Missouri, Arkansas, Louisiana.
 
 ### Enunciado
-Beyoncé quiere que su nuevo disco *Cowboy carter* suene en los 22 estados anteriores contratando el menor número de estaciones de radio. El problema es que hay estaciones que cubren el mismo estado, por ejemplo 'kone' y 'ktwo', ambas cubren Idaho. El objetivo es encontrar la combinación mínima de estaciones que cubra todos los estados. Para eso se programará en python un algoritmo de ascensión de colinas para encotrar tanto el [mínimo global](/src/minimo_global.py) como [mínimos locales](/src/minimo_local.py).
+Beyoncé quiere que su nuevo disco *Cowboy carter* suene en los 22 estados anteriores contratando el menor número de estaciones de radio. El problema es que hay estaciones que cubren el mismo estado, por ejemplo 'kone' y 'ktwo', ambas cubren Idaho. El objetivo es encontrar la combinación mínima de estaciones que cubra todos los estados. Para eso se programará en python un algoritmo de ascensión de colinas para encotrar tanto el [mínimo global](/src/minimo_global.py) como [mínimos locales](/src/minimo_local.py), la función de coste siendo el mínimo de estaciones de radio a contratar.
 
 ## Solución
 ### Mínimo global
