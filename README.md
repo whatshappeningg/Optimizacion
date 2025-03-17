@@ -31,11 +31,11 @@ Beyoncé quiere que su nuevo disco *Cowboy carter* suene en los 22 estados anter
 
 ## Solución
 ### Mínimo global
-Esta función recibe un diccionario con las estaciones y sus estados y una lista con los estados a cubrir (es decir, los [datos](#datos)).
+Esta función recibe un diccionario con las estaciones más sus estados y una lista con los todos estados a cubrir (es decir, los [datos](#datos)).
 
-La solución puede variar según el primer estado que se escoga, por lo que lo primero es encontrar el mejor estado del que partir, es decir, la estación de radio que cubra el mayor número de estados, a partir de ahí se evaluará para saber si se obtiene un resultado óptimo.
+La solución puede variar según el primer estado que se escoga, por lo que lo primero es encontrar el mejor estado del que partir, en este caso la estación de radio que cubra el mayor número de estados. A partir de ahí se evaluarán para saber si se obtiene un resultado óptimo.
 
-1. Estaciones que cubren el mayor número de estados posibles
+Recorriendo el diccionario y con la función `max()`, se compara la longitud de estados cubiertos por estación, obteniendo el máximo. Después se crea una lista (`posible_primera_estacion`) con las estaciones que cumplan la condición de tener el máximo de estados cubiertos.
 ```
     maximo = 0
     for num, contenido in estaciones.items():
@@ -44,7 +44,7 @@ La solución puede variar según el primer estado que se escoga, por lo que lo p
     posible_primera_estacion = [num for num in range(len(estaciones)-1) if len(estaciones[num]['Estados']) >= maximo]
 ```
 
-2. Evaluación de las estaciones
+Se procede a la evaluación de las estaciones recogidas en esta lista.
 
 Por cada estación se inicializan:
 - Número de iteraciones del código (`iteraciones`)
@@ -69,4 +69,42 @@ Antes de reinicializar, el número de estaciones contratadas se almacena en una 
                 iteraciones += 1
 
         num_estaciones.append(len(solucion_estaciones))
+```
+Con esta lista se comprueba el número mínimo de estaciones necesarias para cubrir todos los estados. Se crea una lista de tuplas que asocie las potenciales primeras estaciones con el número de estaciones a contratar de cada una y, con esto, se consigue saber qué estaciones de radio obtienen mejor resultado si se utilizan como estación inicial.
+```
+    min_num_estaciones = min(num_estaciones)
+    estaciones_contratadas = zip(posible_primera_estacion, num_estaciones)
+
+    mejor_primera_estacion = []
+    num_mejor_primera_estacion = [estacion_principal for (estacion_principal, estaciones_totales) in estaciones_contratadas if estaciones_totales == min_num_estaciones]
+    for estacion in num_mejor_primera_estacion:
+         mejor_primera_estacion.append(estaciones[estacion]['ID'])
+
+    print(f'Mejores primeras estaciones: {mejor_primera_estacion}\n')
+```
+Teniendo esta lista de mejores primeras estaciones (`mejor_primera_estacion`) se realiza el proceimiento de evaluación anterior, pero esta vez imprimiendo por pantalla qué estados se añaden en cada iteración.
+```
+    for primera_estacion in num_mejor_primera_estacion:
+
+            iteraciones = 0
+            solucion_estados = estaciones[primera_estacion]['Estados']
+            solucion_estaciones = [estaciones[primera_estacion]['ID']]
+            print(f'Estados añadidos: {solucion_estados} ({len(solucion_estados)})\n')
+
+            for num, contenido in estaciones.items():
+
+                if contenido['Estados'] - solucion_estados != set():
+                    print(f'Estados añadidos: {contenido['Estados'] - solucion_estados} ({len(contenido['Estados'] - solucion_estados)})\n')
+                    solucion_estados = set(solucion_estados) | set(contenido['Estados'])
+                    solucion_estaciones.append(contenido['ID'])
+                    iteraciones += 1
+```
+Como conclusión, la solución incluye el estado inicial, de los estados a cubrir cuántos se cubrieron (siendo un mínimo global, solo es aceptable que todos estén cubiertos), las estaciones a contratar y el total de iteraciones, así como el total de mínimos globales encontrados.
+```
+            print(f'''Estación inicial: {estaciones[primera_estacion]['ID']}
+Estados cubiertos: {len(solucion_estados)}/{len(estados_objetivo)}
+Estaciones contratadas: {solucion_estaciones} ({len(solucion_estaciones)})
+Iteraciones totales: {iteraciones}\n''')
+            
+    print(f'Mínimos globales encontrados: {len(mejor_primera_estacion)}\n')
 ```
